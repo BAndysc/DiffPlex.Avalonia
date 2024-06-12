@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:DiffPlex.Avalonia.Controls">
+
+  <ContextMenu x:Key="DiffPlexContextMenu">
+    <MenuItem Header="Copy" Command="{CompiledBinding $parent[controls:DiffRenderer].Copy}" />
+    <MenuItem Header="Select All" Command="{CompiledBinding $parent[controls:DiffRenderer].SelectAll}" />
+  </ContextMenu>
+
+  <ControlTheme TargetType="{x:Type controls:DiffViewer}" x:Key="{x:Type controls:DiffViewer}">
+    <Setter Property="Background" Value="{DynamicResource TextControlBackground}" />
+    <Setter Property="FontFamily" Value="Menlo, Consolas, Courier New, Monospace" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ScrollViewer Background="{TemplateBinding Background}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+          <controls:SideBySidePanel>
+            <controls:DiffRenderer Diff="{TemplateBinding LeftDiff}"
+                                   x:Name="PART_LeftRenderer"
+                                   IsNewSide="False"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   UnchangedBackground="{TemplateBinding UnchangedBackground}"
+                                   InsertedBackground="{TemplateBinding InsertedBackground}"
+                                   DeletedBackground="{TemplateBinding DeletedBackground}"
+                                   UnchangedForeground="{TemplateBinding UnchangedForeground}"
+                                   InsertedForeground="{TemplateBinding InsertedForeground}"
+                                   DeletedForeground="{TemplateBinding DeletedForeground}"
+                                   Offset="{Binding $parent[controls:SideBySidePanel].Offset}"
+                                   ContextMenu="{StaticResource DiffPlexContextMenu}">
+            </controls:DiffRenderer>
+
+            <controls:DiffRenderer Diff="{TemplateBinding RightDiff}"
+                                   x:Name="PART_RightRenderer"
+                                   IsNewSide="True"
+                                   IsVisible="{TemplateBinding RightDiff, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   UnchangedBackground="{TemplateBinding UnchangedBackground}"
+                                   InsertedBackground="{TemplateBinding InsertedBackground}"
+                                   DeletedBackground="{TemplateBinding DeletedBackground}"
+                                   UnchangedForeground="{TemplateBinding UnchangedForeground}"
+                                   InsertedForeground="{TemplateBinding InsertedForeground}"
+                                   DeletedForeground="{TemplateBinding DeletedForeground}"
+                                   Offset="{Binding $parent[controls:SideBySidePanel].Offset}"
+                                   ContextMenu="{StaticResource DiffPlexContextMenu}">
+            </controls:DiffRenderer>
+          </controls:SideBySidePanel>
+        </ScrollViewer>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

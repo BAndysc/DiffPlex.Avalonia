@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:DiffPlex.Avalonia.Controls;assembly=DiffPlex.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DiffPlex.Avalonia.Demo.MainWindow"
+        Title="Avalonia Demo - DiffPlex" Height="450" Width="800" Icon="Icon.png">
+    <Grid Background="#20808080">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="4" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="4" />
+        </Grid.RowDefinitions>
+        <controls:DiffViewer x:Name="DiffView" LinesContext="2" />
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <CheckBox Width="120" Height="20" VerticalContentAlignment="Center" IsChecked="{Binding IsSideBySide, ElementName=DiffView}" Content="Is_SideBySide" Foreground="{Binding Foreground, ElementName=DiffView}" />
+            <NumericUpDown Minimum="7" Maximum="20" FormatString="0" Value="{Binding #DiffView.FontSize, Mode=TwoWay}" />
+            <CheckBox Height="20" VerticalContentAlignment="Center" x:Name="IgnoreUnchangedCheckBox" IsChecked="{Binding IgnoreUnchanged, ElementName=DiffView}" Content="IgnoreUnchanged" Margin="0,0,24,0" Foreground="{Binding Foreground, ElementName=DiffView}" />
+            <Label Height="20" VerticalContentAlignment="Center" Padding="0,0,8,0" x:Name="MarginLineCountLabel" Target="{Binding ElementName=MarginLineCount}" Foreground="{Binding Foreground, ElementName=DiffView}">LinesContext</Label>
+            <TextBox Width="100" Height="20" VerticalContentAlignment="Center" x:Name="MarginLineCount" Padding="8,0,8,0" Text="{Binding LinesContext, ElementName=DiffView, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=DiffView}" Background="{x:Null}" Margin="0,0,32,0" />
+        </StackPanel>
+    </Grid>
+</Window>
