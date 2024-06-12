@@ -9,10 +9,10 @@ Use the nuget package manager to install `DiffPlex.Avalonia`.
 Install-Package DiffPlex.Avalonia
 ```
 
-And include DiffPlex.Avalonia resources:
+And include DiffPlex.Avalonia style:
 
 ```
-<ResourceInclude Source="avares://DiffPlex.Avalonia/Theme.axaml" />
+<StyleInclude Source="avares://DiffPlex.Avalonia/Theme.axaml" />
 ```
 
 Avalonia version compatibility table:

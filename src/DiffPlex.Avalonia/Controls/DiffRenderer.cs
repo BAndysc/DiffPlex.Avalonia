@@ -40,8 +40,8 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
             var firstVisibleLine = (int)(Offset.Y / LineHeight);
             var lastVisibleLine = (int)((Offset.Y + Viewport.Height) / LineHeight) + 1;
 
-            var actualFirstVisibleLine = Math.Clamp(firstVisibleLine, 0, Diff.Count);
-            var actualLastVisibleLine = Math.Clamp(lastVisibleLine, 0, Diff.Count);
+            var actualFirstVisibleLine = Utils.Clamp(firstVisibleLine, 0, Diff.Count);
+            var actualLastVisibleLine = Utils.Clamp(lastVisibleLine, 0, Diff.Count);
 
             double maxWidth = 0;
             for (int i = actualFirstVisibleLine; i < actualLastVisibleLine; ++i)
@@ -109,8 +109,8 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
         var firstVisibleLine = (int)(Offset.Y / LineHeight);
         var lastVisibleLine = (int)((Offset.Y + Viewport.Height) / LineHeight) + 1;
 
-        var actualFirstVisibleLine = Math.Clamp(firstVisibleLine, 0, Diff.Count);
-        var actualLastVisibleLine = Math.Clamp(lastVisibleLine, 0, Diff.Count);
+        var actualFirstVisibleLine = Utils.Clamp(firstVisibleLine, 0, Diff.Count);
+        var actualLastVisibleLine = Utils.Clamp(lastVisibleLine, 0, Diff.Count);
 
         y = actualFirstVisibleLine * LineHeight;
 
@@ -200,8 +200,8 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
                             var start = i == SelectionStart.Line ? SelectionStart.Character * CharWidth : 0;
                             var end = i == SelectionEnd.Line ? SelectionEnd.Character * CharWidth : ft.WidthIncludingTrailingWhitespace + x;
 
-                            start = Math.Clamp(start + TextStartLeft, x, x + ft.WidthIncludingTrailingWhitespace);
-                            end = Math.Clamp(end + TextStartLeft, x, x + ft.WidthIncludingTrailingWhitespace);
+                            start = Utils.Clamp(start + TextStartLeft, x, x + ft.WidthIncludingTrailingWhitespace);
+                            end = Utils.Clamp(end + TextStartLeft, x, x + ft.WidthIncludingTrailingWhitespace);
 
                             if (start < end)
                                 context.FillRectangle(Brushes.LightBlue, new Rect(start - Offset.X, y - Offset.Y, end - start, LineHeight));
