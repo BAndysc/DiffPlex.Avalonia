@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.1.0-beta2" />
+        <PackageReference Include="Avalonia" Version="11.2.999-cibuild0048166-alpha" />
         <PackageReference Include="DiffPlex" Version="1.7.2" />
     </ItemGroup>
 
