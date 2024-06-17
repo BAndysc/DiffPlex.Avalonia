@@ -14,7 +14,7 @@
     <Setter Property="Template">
       <ControlTemplate>
         <ScrollViewer Background="{TemplateBinding Background}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-          <controls:SideBySidePanel>
+          <controls:SideBySidePanel Spacing="5">
             <controls:DiffRenderer Diff="{TemplateBinding LeftDiff}"
                                    x:Name="PART_LeftRenderer"
                                    IsNewSide="False"

@@ -19,6 +19,8 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
 
     private Vector offset;
 
+    private double maxWidthYet;
+
     static DiffRenderer()
     {
         AffectsArrange<DiffRenderer>(DiffProperty, FontFamilyProperty, FontSizeProperty, PaddingProperty);
@@ -28,6 +30,7 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
         OffsetProperty.Changed.AddClassHandler<DiffRenderer>((renderer, e) => renderer.UpdateExtents());
         DiffProperty.Changed.AddClassHandler<DiffRenderer>((renderer, e) =>
         {
+            renderer.maxWidthYet = 0;
             renderer.SetCurrentValue(SelectionStartProperty, default);
             renderer.SetCurrentValue(SelectionEndProperty, default);
         });
@@ -43,7 +46,6 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
             var actualFirstVisibleLine = Utils.Clamp(firstVisibleLine, 0, Diff.Count);
             var actualLastVisibleLine = Utils.Clamp(lastVisibleLine, 0, Diff.Count);
 
-            double maxWidth = 0;
             for (int i = actualFirstVisibleLine; i < actualLastVisibleLine; ++i)
             {
                 var diff = Diff[i];
@@ -51,19 +53,19 @@ internal partial class DiffRenderer : Control, ILogicalScrollable
                     continue;
 
                 var ft = new FormattedText(diff.Text, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface(FontFamily), FontSize, Foreground);
-                var width = ft.WidthIncludingTrailingWhitespace;
+                var width = ft.WidthIncludingTrailingWhitespace + Padding;
                 if (diff.Position.HasValue)
                 {
                     var lineNumberFt = new FormattedText(diff.Position.Value.ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface(FontFamily), FontSize, Foreground);
                     width += lineNumberFt.WidthIncludingTrailingWhitespace;
                 }
-                width += CharWidth; // for +- sign
+                width += CharWidth + Padding; // for +- sign
 
-                maxWidth = Math.Max(maxWidth, width);
+                maxWidthYet = Math.Max(maxWidthYet, width);
             }
 
             var oldExtents = Extent;
-            Extent = new Size(maxWidth, LineHeight * Diff.Count);
+            Extent = new Size(maxWidthYet, LineHeight * Diff.Count);
 
             if (Math.Abs(oldExtents.Width - Extent.Width) > 0.1 || Math.Abs(oldExtents.Height - Extent.Height) > 0.1)
             {

@@ -8,7 +8,7 @@ namespace DiffPlex.Avalonia.Controls;
 
 internal class SideBySidePanel : Panel, ILogicalScrollable
 {
-    public Size Extent => LogicalScrollables.Count > 0 ? LogicalScrollables[0].Extent : new Size(0, 0);
+    public Size Extent => LogicalScrollables.Count > 0 ? new Size(LogicalScrollables.Select(x => x.Extent.Width).Max(), LogicalScrollables.Select(x => x.Extent.Height).Max()) : new Size(0, 0);
 
     private Vector offset;
 
@@ -18,13 +18,21 @@ internal class SideBySidePanel : Panel, ILogicalScrollable
             o => (o as IScrollable).Offset,
             (o, v) => (o as IScrollable).Offset = v);
 
+    public static readonly StyledProperty<double> SpacingProperty = AvaloniaProperty.Register<SideBySidePanel, double>(nameof(Spacing));
+
+    public double Spacing
+    {
+        get => (double)GetValue(SpacingProperty);
+        set => SetValue(SpacingProperty, value);
+    }
+
     public Vector Offset
     {
         get => offset;
         set => SetAndRaise(OffsetProperty, ref offset, value);
     }
 
-    public Size Viewport => LogicalScrollables.Count > 0 ? LogicalScrollables[0].Viewport : new Size(0, 0);
+    public Size Viewport => LogicalScrollables.Count > 0 ? new Size(LogicalScrollables.Select(x => x.Viewport.Width).Max(), LogicalScrollables.Select(x => x.Viewport.Height).Max()) : new Size(0, 0);
 
     public bool BringIntoView(Control target, Rect targetRect)
     {
@@ -47,26 +55,31 @@ internal class SideBySidePanel : Panel, ILogicalScrollable
 
     public bool IsLogicalScrollEnabled => true;
 
-    public Size ScrollSize => LogicalScrollables.Count > 0 ? LogicalScrollables[0].ScrollSize : new Size(0, 0);
+    public Size ScrollSize => LogicalScrollables.Count > 0 ? new Size(LogicalScrollables.Select(x => x.ScrollSize.Width).Max(), LogicalScrollables.Select(x => x.ScrollSize.Height).Max()) : new Size(0, 0);
 
-    public Size PageScrollSize => LogicalScrollables.Count > 0 ? LogicalScrollables[0].PageScrollSize : new Size(0, 0);
+    public Size PageScrollSize => LogicalScrollables.Count > 0 ? new Size(LogicalScrollables.Select(x => x.PageScrollSize.Width).Max(), LogicalScrollables.Select(x => x.PageScrollSize.Height).Max()) : new Size(0, 0);
 
     public event EventHandler? ScrollInvalidated;
 
     protected override Size ArrangeOverride(Size finalSize)
     {
         var childrenCount = Children.Count(c => c.IsEffectivelyVisible);
-        var widthPerChildren = childrenCount > 0 ? finalSize.Width / childrenCount : 0;
+        var widthPerChildren = childrenCount > 0 ? finalSize.Width / childrenCount - (Math.Max(childrenCount - 1, 0) * Spacing) : 0;
         double x = 0;
         foreach (var child in Children)
         {
             if (child.IsEffectivelyVisible)
             {
                 child.Arrange(new Rect(new Point(x, 0), new Size(widthPerChildren, finalSize.Height)));
-                x += widthPerChildren;
+                x += widthPerChildren + Spacing;
             }
         }
         return finalSize;
+    }
+
+    static SideBySidePanel()
+    {
+        AffectsArrange<SideBySidePanel>(SpacingProperty);
     }
 
     public SideBySidePanel()
